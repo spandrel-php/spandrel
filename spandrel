@@ -1,0 +1,8 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+Phar::loadPhar(__DIR__ . '/spandrel.phar', 'spandrel.phar');
+
+require 'phar://spandrel.phar/bin/spandrel.php';

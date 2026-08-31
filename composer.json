@@ -1,0 +1,14 @@
+{
+    "name": "spandrel/spandrel",
+    "description": "Spandrel is a static analysis tool for PHP applications, enforcing architectural rules over a codebase's dependency graph.",
+    "license": "AGPL-3.0-or-later",
+    "keywords": ["dev", "static analysis", "architecture"],
+    "require": {
+        "php": "^8.5"
+    },
+    "bin": ["spandrel", "spandrel.phar"],
+    "support": {
+        "issues": "https://github.com/spandrel-php/spandrel/issues",
+        "source": "https://github.com/spandrel-php/spandrel-src"
+    }
+}
