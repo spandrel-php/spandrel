@@ -33,24 +33,36 @@ This adds `vendor/bin/spandrel`, backed by a signed `spandrel.phar` —
 see [CHANGELOG.md](https://github.com/spandrel-php/spandrel/blob/main/CHANGELOG.md)
 for release history.
 
-Or download and run the phar directly, without Composer:
+Prefer to run the phar directly, without Composer? Every release is
+signed — verify it before running it, not after. Fetch the signing
+key **by its fingerprint** from a keyserver, so the identity being
+checked against is something you supply, not something downloaded
+alongside the artifact it's meant to authenticate — then download a
+tagged release (not `main`, which moves) and verify:
 
 ```sh
-curl -LO https://github.com/spandrel-php/spandrel/raw/main/spandrel.phar
-php spandrel.phar analyse
+SPANDREL_KEY=824682B3BE7DE81A8108FA98CE6235F34D7E5C43
+gpg --keyserver hkps://keys.openpgp.org --recv-keys "$SPANDREL_KEY"
+curl -LO https://github.com/spandrel-php/spandrel/raw/<tag>/spandrel.phar
+curl -LO https://github.com/spandrel-php/spandrel/raw/<tag>/spandrel.phar.asc
+gpg --verify spandrel.phar.asc spandrel.phar
 ```
 
-Every release is signed — verify `spandrel.phar.asc` against the
-bundled public key before trusting a download (fingerprint
-`824682B3BE7DE81A8108FA98CE6235F34D7E5C43`; check it against what
-`gpg --import` itself reports, in case this key is ever rotated —
-also published on [keys.openpgp.org](https://keys.openpgp.org)):
+If the keyserver isn't reachable, the key bundled with the release is
+an offline fallback — import it, but still confirm its fingerprint
+yourself rather than trusting the import alone:
 
 ```sh
-curl -LO https://github.com/spandrel-php/spandrel/raw/main/spandrel-bot.gpg.asc
-curl -LO https://github.com/spandrel-php/spandrel/raw/main/spandrel.phar.asc
+curl -LO https://github.com/spandrel-php/spandrel/raw/<tag>/spandrel-bot.gpg.asc
 gpg --import spandrel-bot.gpg.asc
+gpg --fingerprint "$SPANDREL_KEY"
 gpg --verify spandrel.phar.asc spandrel.phar
+```
+
+Once `gpg --verify` reports a good signature from that fingerprint:
+
+```sh
+php spandrel.phar analyse
 ```
 
 `init` and `spandrel.yaml`/`architecture.md` auto-discovery are both
